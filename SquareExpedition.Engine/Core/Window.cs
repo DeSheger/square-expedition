@@ -3,7 +3,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace Engine.Core;
+namespace SquareExpedition.Engine.Core;
 
 public class Window : GameWindow
 {
