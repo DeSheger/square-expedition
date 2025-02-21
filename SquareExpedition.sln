@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Client", "SquareExpedition.Client\SquareExpedition.Client.csproj", "{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Common", "SquareExpedition.Common\SquareExpedition.Common.csproj", "{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{5EE9E440-CD34-4655-BA08-D0028B93F1F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Data", "SquareExpedition.Data\SquareExpedition.Data.csproj", "{5EE9E440-CD34-4655-BA08-D0028B93F1F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{D7D8F48B-54F9-4CFE-870D-5C7DDD7E6750}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Engine", "SquareExpedition.Engine\SquareExpedition.Engine.csproj", "{D7D8F48B-54F9-4CFE-870D-5C7DDD7E6750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML", "ML\ML.csproj", "{07D85BA4-4F4E-4696-AA77-D7D9571B964D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.ML", "SquareExpedition.ML\SquareExpedition.ML.csproj", "{07D85BA4-4F4E-4696-AA77-D7D9571B964D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{12924448-014E-479C-AD26-AE7ACE5EB188}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Server", "SquareExpedition.Server\SquareExpedition.Server.csproj", "{12924448-014E-479C-AD26-AE7ACE5EB188}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

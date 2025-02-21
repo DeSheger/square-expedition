@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\ML\ML.csproj" />
+    <ProjectReference Include="..\SquareExpedition.Data\SquareExpedition.Data.csproj" />
+    <ProjectReference Include="..\SquareExpedition.Common\SquareExpedition.Common.csproj" />
+    <ProjectReference Include="..\SquareExpedition.ML\SquareExpedition.ML.csproj" />
   </ItemGroup>
 
   <ItemGroup>
