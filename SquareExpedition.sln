@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Client", "SquareExpedition.Client\SquareExpedition.Client.csproj", "{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Common", "SquareExpedition.Common\SquareExpedition.Common.csproj", "{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Data", "SquareExpedition.Data\SquareExpedition.Data.csproj", "{5EE9E440-CD34-4655-BA08-D0028B93F1F4}"
@@ -15,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.ML", "Squa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Server", "SquareExpedition.Server\SquareExpedition.Server.csproj", "{12924448-014E-479C-AD26-AE7ACE5EB188}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Client", "SquareExpedition.Client\SquareExpedition.Client.csproj", "{B97E2ECE-12AB-4023-954D-901B0A64E1A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,10 +24,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F15F145B-1C69-4A24-A1BE-94E15C27AEAF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C670D6FE-BBFC-4B3A-862C-6AB22DF47E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +44,11 @@ Global
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
