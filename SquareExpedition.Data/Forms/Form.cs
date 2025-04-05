@@ -1,6 +1,6 @@
 namespace SquareExpedition.Data.Forms;
 
-public class Form
+public abstract class Form
 {
-    
+    public float[]? Vertices { get; set; }
 }

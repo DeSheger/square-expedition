@@ -1,6 +1,6 @@
-namespace SquareExpedition.Data.Objects.Staff;
+namespace SquareExpedition.Data.Objects.Staffs;
 
-public class Staff
+public abstract class Staff : Object
 {
     
 }

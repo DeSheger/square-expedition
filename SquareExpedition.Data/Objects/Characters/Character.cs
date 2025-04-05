@@ -1,6 +1,6 @@
-namespace SquareExpedition.Data.Objects.Character;
+namespace SquareExpedition.Data.Objects.Characters;
 
-public class Character
+public abstract class Character : Object
 {
     
 }

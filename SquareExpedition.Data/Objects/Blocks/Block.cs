@@ -1,6 +1,6 @@
-namespace SquareExpedition.Data.Objects.Block;
+namespace SquareExpedition.Data.Objects.Blocks;
 
-public class Block
+public abstract class Block : Object
 {
     
 }

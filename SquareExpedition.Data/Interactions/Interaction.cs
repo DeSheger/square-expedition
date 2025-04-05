@@ -1,6 +1,6 @@
-namespace SquareExpedition.Data.Actions;
+namespace SquareExpedition.Data.Interactions;
 
-public abstract class Behavior
+public abstract class Interaction
 {
     
 }

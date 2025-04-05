@@ -1,6 +1,6 @@
 namespace SquareExpedition.Data.Physics;
 
-public class Physic
+public abstract class Physic
 {
     
 }
