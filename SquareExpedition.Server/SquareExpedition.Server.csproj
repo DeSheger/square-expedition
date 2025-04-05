@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SquareExpedition.Engine\SquareExpedition.Engine.csproj" />
+    <ProjectReference Include="..\SquareExpedition.Application\SquareExpedition.Application.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
