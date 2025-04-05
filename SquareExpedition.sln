@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Common", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Data", "SquareExpedition.Data\SquareExpedition.Data.csproj", "{5EE9E440-CD34-4655-BA08-D0028B93F1F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Engine", "SquareExpedition.Engine\SquareExpedition.Engine.csproj", "{D7D8F48B-54F9-4CFE-870D-5C7DDD7E6750}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Application", "SquareExpedition.Application\SquareExpedition.Application.csproj", "{D7D8F48B-54F9-4CFE-870D-5C7DDD7E6750}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.ML", "SquareExpedition.ML\SquareExpedition.ML.csproj", "{07D85BA4-4F4E-4696-AA77-D7D9571B964D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Server", "SquareExpedition.Server\SquareExpedition.Server.csproj", "{12924448-014E-479C-AD26-AE7ACE5EB188}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Client", "SquareExpedition.Client\SquareExpedition.Client.csproj", "{B97E2ECE-12AB-4023-954D-901B0A64E1A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquareExpedition.Client", "SquareExpedition.Client\SquareExpedition.Client.csproj", "{7128B152-487B-486F-9FD3-AB3DC924DA70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +44,10 @@ Global
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12924448-014E-479C-AD26-AE7ACE5EB188}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B97E2ECE-12AB-4023-954D-901B0A64E1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7128B152-487B-486F-9FD3-AB3DC924DA70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7128B152-487B-486F-9FD3-AB3DC924DA70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7128B152-487B-486F-9FD3-AB3DC924DA70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7128B152-487B-486F-9FD3-AB3DC924DA70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
