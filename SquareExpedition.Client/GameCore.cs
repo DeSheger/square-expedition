@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Application.Services;
 using SquareExpedition.Data.Interactions;
+using SquareExpedition.Data.Terrains;
 
 namespace SquareExpedition.Client;
 
@@ -17,6 +19,9 @@ public class GameCore : Game
     private BasicEffect _basicEffect;
     private VertexPositionColor[] _triangleVertices;
     private VertexBuffer _vertexBuffer;
+    
+    private VertexBuffer _blockLinesVertexBuffer;
+    private int _blockLinesVertexCount;
 
     private CameraService _cameraService;
     private ControllerService _controllerService;
@@ -32,12 +37,53 @@ public class GameCore : Game
     {
         base.Initialize();
         
+        var terrainGeneratorService = new TerrainGeneratorService();
+        var terrain = terrainGeneratorService.GenerateNewTerrain(TerrainSize.Small);
+        
+        var vertices = new List<VertexPositionColor>();
+
+        foreach (var block in terrain.Blocks)
+        {
+            var bbox = block.FormImplementation;
+            // For each bounding box, get its 8 corners
+            var corners = bbox.GetCorners();
+            
+            void AddLine(int start, int end)
+            {
+                vertices.Add(new VertexPositionColor(corners[start], Color.Green));
+                vertices.Add(new VertexPositionColor(corners[end], Color.Green));
+            }
+
+            AddLine(0, 1);
+            AddLine(1, 2);
+            AddLine(2, 3);
+            AddLine(3, 0);
+            AddLine(4, 5);
+            AddLine(5, 6);
+            AddLine(6, 7);
+            AddLine(7, 4);
+            AddLine(0, 4);
+            AddLine(1, 5);
+            AddLine(2, 6);
+            AddLine(3, 7);
+        }
+        
+        _blockLinesVertexCount = vertices.Count;
+        _blockLinesVertexBuffer = new VertexBuffer(
+            GraphicsDevice,
+            typeof(VertexPositionColor),
+            _blockLinesVertexCount,
+            BufferUsage.WriteOnly
+        );
+        _blockLinesVertexBuffer.SetData(vertices.ToArray());
+
+        
         // Create a camera and fetch the CameraService instance
         _cameraService = CameraService.GetInstance(new Camera());
         _controllerService = ControllerService.GetInstance(_cameraService);
 
         // Initial camera setup
-        _cameraService.SetCameraPosition(0f, 0f, -100f);
+        _cameraService.SetCameraPosition(0f, 100f, -100f);
         _cameraService.SetCameraTarget(0f, 0f, 0f);
 
         // Projection matrix
@@ -69,21 +115,6 @@ public class GameCore : Game
             VertexColorEnabled = true,
             LightingEnabled = false
         };
-
-        // Simple triangle vertices
-        _triangleVertices = new VertexPositionColor[3];
-        _triangleVertices[0] = new VertexPositionColor(new Vector3(0, 20, 0), Color.Red);
-        _triangleVertices[1] = new VertexPositionColor(new Vector3(-20, -20, 0), Color.Green);
-        _triangleVertices[2] = new VertexPositionColor(new Vector3(20, -20, 0), Color.Blue);
-
-        // Vertex buffer
-        _vertexBuffer = new VertexBuffer(
-            GraphicsDevice, 
-            typeof(VertexPositionColor), 
-            3, 
-            BufferUsage.WriteOnly
-        );
-        _vertexBuffer.SetData(_triangleVertices);
     }
 
     protected override void LoadContent()
@@ -107,8 +138,8 @@ public class GameCore : Game
         _basicEffect.Projection = _projectionMatrix;
         _basicEffect.View = _viewMatrix;
         _basicEffect.World = _worldMatrix;
-
-        GraphicsDevice.SetVertexBuffer(_vertexBuffer);
+        
+        GraphicsDevice.SetVertexBuffer(_blockLinesVertexBuffer);
 
         // Allow front/back face drawing
         RasterizerState rasterizerState = new RasterizerState
@@ -121,7 +152,7 @@ public class GameCore : Game
         foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
         {
             pass.Apply();
-            GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
+            GraphicsDevice.DrawPrimitives(PrimitiveType.LineList, 0, _blockLinesVertexCount / 2);
         }
 
 

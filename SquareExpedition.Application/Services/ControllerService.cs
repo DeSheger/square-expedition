@@ -42,33 +42,33 @@ public class ControllerService
         var keyboardState = Keyboard.GetState();
 
         // Move camera
-        if (keyboardState.IsKeyDown(Keys.Left))
+        if (keyboardState.IsKeyDown(Keys.A))
         {
             _cameraService.UpdateCameraPosition(-1f, 0f, 0f);
             _cameraService.UpdateCameraTarget(-1f, 0f, 0f);
         }
 
-        if (keyboardState.IsKeyDown(Keys.Right))
+        if (keyboardState.IsKeyDown(Keys.D))
         {
             _cameraService.UpdateCameraPosition(1f, 0f, 0f);
             _cameraService.UpdateCameraTarget(1f, 0f, 0f);
         }
 
-        if (keyboardState.IsKeyDown(Keys.Up))
+        if (keyboardState.IsKeyDown(Keys.W))
         {
-            _cameraService.UpdateCameraPosition(0f, -1f, 0f);
-            _cameraService.UpdateCameraTarget(0f, -1f, 0f);
+            _cameraService.UpdateCameraPosition(0f, 0f, -1f);
+            _cameraService.UpdateCameraTarget(0f, 0f, -1f);
         }
 
-        if (keyboardState.IsKeyDown(Keys.Down))
+        if (keyboardState.IsKeyDown(Keys.S))
         {
-            _cameraService.UpdateCameraPosition(0f, 1f, 0f);
-            _cameraService.UpdateCameraTarget(0f, 1f, 0f);
+            _cameraService.UpdateCameraPosition(0f, 0f, 1f);
+            _cameraService.UpdateCameraTarget(0f, 0f, 1f);
         }
 
         // Zoom
-        if (keyboardState.IsKeyDown(Keys.OemPlus)) _cameraService.UpdateCameraPosition(0f, 0f, 1f);
-        if (keyboardState.IsKeyDown(Keys.OemMinus)) _cameraService.UpdateCameraPosition(0f, 0f, -1f);
+        if (keyboardState.IsKeyDown(Keys.Up)) _cameraService.UpdateCameraPosition(0f, 0.25f, 0f);
+        if (keyboardState.IsKeyDown(Keys.Down)) _cameraService.UpdateCameraPosition(0f, -0.25f, 0f);
 
         // Toggle orbit
         if (keyboardState.IsKeyDown(Keys.Space)) _orbit = !_orbit;
