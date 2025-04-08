@@ -50,6 +50,8 @@ public class CameraService
     {
         if (_cameraInstance?.Camera?.CamPosition == null)
             throw new Exception("Camera is not initialized.");
+        
+        Console.WriteLine($"{_cameraInstance.Camera.CamPosition.Value.X}  {_cameraInstance.Camera.CamPosition.Value.Y} {_cameraInstance.Camera.CamPosition.Value.Z}");
 
         var current = _cameraInstance.Camera.CamPosition.Value;
         _cameraInstance.Camera.CamPosition = new Vector3(
@@ -63,6 +65,8 @@ public class CameraService
     {
         if (_cameraInstance?.Camera?.CamTarget == null)
             throw new Exception("Camera is not initialized.");
+        
+        Console.WriteLine($"{_cameraInstance.Camera.CamTarget.Value.X}  {_cameraInstance.Camera.CamTarget.Value.Y} {_cameraInstance.Camera.CamTarget.Value.Z}");
 
         var current = _cameraInstance.Camera.CamTarget.Value;
         _cameraInstance.Camera.CamTarget = new Vector3(

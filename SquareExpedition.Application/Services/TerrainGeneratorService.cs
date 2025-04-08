@@ -19,41 +19,47 @@ public class TerrainGeneratorService : ITerrainGeneratorService
 
         return terrain;
     }
-    
+
+    public Terrain GetTerrainInfo()
+    {
+        throw new NotImplementedException();
+    }
+
     private IEnumerable<Block> GenerateBlocks(Terrain terrain)
     {
-        int totalBlocks = (int)terrain.Size;
-        
-        int dimension = (int)Math.Sqrt(totalBlocks);
-        
-        int offset = dimension / 4;
+        var totalBlocks = (int)terrain.Size;
 
-        for (int x = 0; x < dimension; x++)
+        var dimension = (int)Math.Sqrt(totalBlocks);
+
+        var offset = dimension / 2;
+
+        for (var x = 0; x < dimension; x++)
+        for (var z = 0; z < dimension; z++)
         {
-            for (int z = 0; z < dimension; z++)
-            {
-                var minPos = new Vector3(x - offset, 0, z - offset);
-                
-                var maxPos = minPos + new Vector3(BlockProperties.DefaultBlockSize, BlockProperties.DefaultBlockSize, BlockProperties.DefaultBlockSize);
+            var minPos = new Vector3(x - offset, 0, z - offset);
 
-                yield return new Block
-                {
-                    Id = Guid.NewGuid(),
-                    BlockSize = BlockProperties.DefaultBlockSize,
-                    FormImplementation = new BoundingBox(minPos, maxPos),
-                    Form = null,
-                    Interactions = new List<Interaction>(),
-                    Physics = new List<Physic>()
-                };
-            }
+            var maxPos = minPos + new Vector3(BlockProperties.DefaultBlockSize, BlockProperties.DefaultBlockSize,
+                BlockProperties.DefaultBlockSize);
+
+            yield return new Block
+            {
+                Id = Guid.NewGuid(),
+                BlockSize = BlockProperties.DefaultBlockSize,
+                FormImplementation = new BoundingBox(minPos, maxPos),
+                Form = null,
+                Interactions = new List<Interaction>(),
+                Physics = new List<Physic>()
+            };
         }
     }
-    
+
     private Terrain GetPrimaryTerrainInfo(TerrainSize size)
-        => new Terrain
+    {
+        return new Terrain
         {
             Id = new Guid(),
             Size = size,
-            Randomizer = new Random().Next(1, Int32.MaxValue)
+            Randomizer = new Random().Next(1, int.MaxValue)
         };
+    }
 }

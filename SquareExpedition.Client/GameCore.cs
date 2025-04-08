@@ -83,7 +83,7 @@ public class GameCore : Game
         _controllerService = ControllerService.GetInstance(_cameraService);
 
         // Initial camera setup
-        _cameraService.SetCameraPosition(0f, 100f, -100f);
+        _cameraService.SetCameraPosition(0f, 35f, -35f);
         _cameraService.SetCameraTarget(0f, 0f, 0f);
 
         // Projection matrix
@@ -154,8 +154,7 @@ public class GameCore : Game
             pass.Apply();
             GraphicsDevice.DrawPrimitives(PrimitiveType.LineList, 0, _blockLinesVertexCount / 2);
         }
-
-
+        
         base.Draw(gameTime);
     }
 }
