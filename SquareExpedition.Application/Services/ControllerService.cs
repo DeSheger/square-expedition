@@ -27,7 +27,6 @@ public class ControllerService
     }
 
     private CameraService? _cameraService;
-    private bool _orbit;
 
     public void HandleInput(GameTime gameTime, Game game, ref Matrix viewMatrix)
     {
@@ -42,43 +41,42 @@ public class ControllerService
         var keyboardState = Keyboard.GetState();
 
         // Move camera
-        if (keyboardState.IsKeyDown(Keys.A))
-        {
-            _cameraService.UpdateCameraPosition(-1f, 0f, 0f);
-            _cameraService.UpdateCameraTarget(-1f, 0f, 0f);
-        }
-
-        if (keyboardState.IsKeyDown(Keys.D))
-        {
-            _cameraService.UpdateCameraPosition(1f, 0f, 0f);
-            _cameraService.UpdateCameraTarget(1f, 0f, 0f);
-        }
-
         if (keyboardState.IsKeyDown(Keys.W))
         {
-            _cameraService.UpdateCameraPosition(0f, 0f, -1f);
-            _cameraService.UpdateCameraTarget(0f, 0f, -1f);
-        }
-
-        if (keyboardState.IsKeyDown(Keys.S))
-        {
+            if(_cameraService.GetCameraPosition().Z+25 > 500)
+                return;
+            
             _cameraService.UpdateCameraPosition(0f, 0f, 1f);
             _cameraService.UpdateCameraTarget(0f, 0f, 1f);
         }
 
-        // Zoom
-        if (keyboardState.IsKeyDown(Keys.Up)) _cameraService.UpdateCameraPosition(0f, 0.25f, 0f);
-        if (keyboardState.IsKeyDown(Keys.Down)) _cameraService.UpdateCameraPosition(0f, -0.25f, 0f);
-
-        // Toggle orbit
-        if (keyboardState.IsKeyDown(Keys.Space)) _orbit = !_orbit;
-
-        // Orbit logic
-        if (_orbit)
+        if (keyboardState.IsKeyDown(Keys.D))
         {
-            var rotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(1f));
-            var newPosition = Vector3.Transform(_cameraService.GetCameraPosition(), rotationMatrix);
-            _cameraService.SetCameraPosition(newPosition.X, newPosition.Y, newPosition.Z);
+            // TODO: Move to service ITerrainGenerator and get size terrain info
+            if(_cameraService.GetCameraPosition().X < -500)
+                return;
+            
+            _cameraService.UpdateCameraPosition(-1f, 0f, 0f);
+            _cameraService.UpdateCameraTarget(-1f, 0f, 0f);
+        }
+
+        if (keyboardState.IsKeyDown(Keys.S))
+        {
+            if(_cameraService.GetCameraPosition().Z+25 < -500)
+                return;
+            
+            _cameraService.UpdateCameraPosition(0f, 0f, -1f);
+            _cameraService.UpdateCameraTarget(0f, 0f, -1f);
+        }
+
+        if (keyboardState.IsKeyDown(Keys.A))
+        {
+            // TODO: Move to service ITerrainGenerator and get size terrain info
+            if(_cameraService.GetCameraPosition().X > 500)
+                return;
+            
+            _cameraService.UpdateCameraPosition(1f, 0f, 0f);
+            _cameraService.UpdateCameraTarget(1f, 0f, 0f);
         }
 
         // Update the view matrix
