@@ -2,7 +2,7 @@ namespace SquareExpedition.Data.Terrains;
 
 public enum TerrainSize
 {
-    Small = 1000000,
-    Medium = 2250000,
-    Big = 4000000,
+    Small = 10000,
+    Medium = 22500,
+    Big = 40000,
 }

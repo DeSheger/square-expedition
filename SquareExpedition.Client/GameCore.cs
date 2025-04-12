@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Application.Services;
@@ -17,11 +18,12 @@ public class GameCore : Game
     private Matrix _worldMatrix;
 
     private BasicEffect _basicEffect;
-    private VertexPositionColor[] _triangleVertices;
-    private VertexBuffer _vertexBuffer;
     
     private VertexBuffer _blockLinesVertexBuffer;
     private int _blockLinesVertexCount;
+    
+    //private VertexBuffer _blockPointsVertexBuffer;
+    //private int _blockPointsVertexCount;
 
     private CameraService _cameraService;
     private ControllerService _controllerService;
@@ -37,19 +39,25 @@ public class GameCore : Game
     {
         base.Initialize();
         
-        var terrainGeneratorService = new TerrainGeneratorService();
-        var terrain = terrainGeneratorService.GenerateNewTerrain(TerrainSize.Small);
+        var worldGeneratorService = new WorldGeneratorService();
+        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small);
         
         var vertices = new List<VertexPositionColor>();
 
-        foreach (var block in terrain.Blocks)
+        if (world.Area?.Localizations == null)
+            throw new Exception("Localization is not generated for area");
+
+        foreach (var localization in world.Area.Localizations)
         {
-            var bbox = block.FormImplementation;
+            var gameObject = localization.GetGameObject();
             // For each bounding box, get its 8 corners
-            var corners = bbox.GetCorners();
+            var corners = gameObject?.GetCorners();
             
             void AddLine(int start, int end)
             {
+                if(corners == null)
+                    return;
+                
                 vertices.Add(new VertexPositionColor(corners[start], Color.Green));
                 vertices.Add(new VertexPositionColor(corners[end], Color.Green));
             }
@@ -83,7 +91,7 @@ public class GameCore : Game
         _controllerService = ControllerService.GetInstance(_cameraService);
 
         // Initial camera setup
-        _cameraService.SetCameraPosition(0f, 35f, -35f);
+        _cameraService.SetCameraPosition(0f, 5f, -5f);
         _cameraService.SetCameraTarget(0f, 0f, 0f);
 
         // Projection matrix

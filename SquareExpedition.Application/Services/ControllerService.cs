@@ -11,6 +11,8 @@ public class ControllerService
 
     private static readonly object Lock = new();
 
+    private float CameraSpeed { get; set; } = 0.25f;
+
     public static ControllerService GetInstance(CameraService cameraService)
     {
         if (_controllerInstance == null)
@@ -46,8 +48,8 @@ public class ControllerService
             if(_cameraService.GetCameraPosition().Z+25 > 500)
                 return;
             
-            _cameraService.UpdateCameraPosition(0f, 0f, 1f);
-            _cameraService.UpdateCameraTarget(0f, 0f, 1f);
+            _cameraService.UpdateCameraPosition(0f, 0f, CameraSpeed);
+            _cameraService.UpdateCameraTarget(0f, 0f, CameraSpeed);
         }
 
         if (keyboardState.IsKeyDown(Keys.D))
@@ -56,8 +58,8 @@ public class ControllerService
             if(_cameraService.GetCameraPosition().X < -500)
                 return;
             
-            _cameraService.UpdateCameraPosition(-1f, 0f, 0f);
-            _cameraService.UpdateCameraTarget(-1f, 0f, 0f);
+            _cameraService.UpdateCameraPosition(-CameraSpeed, 0f, 0f);
+            _cameraService.UpdateCameraTarget(-CameraSpeed, 0f, 0f);
         }
 
         if (keyboardState.IsKeyDown(Keys.S))
@@ -65,8 +67,8 @@ public class ControllerService
             if(_cameraService.GetCameraPosition().Z+25 < -500)
                 return;
             
-            _cameraService.UpdateCameraPosition(0f, 0f, -1f);
-            _cameraService.UpdateCameraTarget(0f, 0f, -1f);
+            _cameraService.UpdateCameraPosition(0f, 0f, -CameraSpeed);
+            _cameraService.UpdateCameraTarget(0f, 0f, -CameraSpeed);
         }
 
         if (keyboardState.IsKeyDown(Keys.A))
@@ -75,8 +77,8 @@ public class ControllerService
             if(_cameraService.GetCameraPosition().X > 500)
                 return;
             
-            _cameraService.UpdateCameraPosition(1f, 0f, 0f);
-            _cameraService.UpdateCameraTarget(1f, 0f, 0f);
+            _cameraService.UpdateCameraPosition(CameraSpeed, 0f, 0f);
+            _cameraService.UpdateCameraTarget(CameraSpeed, 0f, 0f);
         }
 
         // Update the view matrix

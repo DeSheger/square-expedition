@@ -1,65 +1,46 @@
-using Common.Constants;
-using Microsoft.Xna.Framework;
+using System.Numerics;
 using SquareExpedition.Application.Abstract;
-using SquareExpedition.Data.Interactions;
+using SquareExpedition.Data.Areas;
 using SquareExpedition.Data.Objects.Blocks;
-using SquareExpedition.Data.Physics;
-using SquareExpedition.Data.Terrains;
-using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace SquareExpedition.Application.Services;
 
 public class TerrainGeneratorService : ITerrainGeneratorService
 {
-    public Terrain GenerateNewTerrain(TerrainSize size)
+    public Area GenerateNewTerrain(Area area)
     {
-        var terrain = GetPrimaryTerrainInfo(size);
+        var areaWithTerrain = GenerateBlocks(area);
 
-        terrain.Blocks = GenerateBlocks(terrain).ToList();
-
-        return terrain;
+        return areaWithTerrain;
     }
 
-    public Terrain GetTerrainInfo()
+    private Area GenerateBlocks(Area area)
     {
-        throw new NotImplementedException();
-    }
-
-    private IEnumerable<Block> GenerateBlocks(Terrain terrain)
-    {
-        var totalBlocks = (int)terrain.Size;
+        var totalBlocks = (int)area.Size;
 
         var dimension = (int)Math.Sqrt(totalBlocks);
 
         var offset = dimension / 2;
 
         for (var x = 0; x < dimension; x++)
+        for (var y = 0; y < 1; y++)
         for (var z = 0; z < dimension; z++)
         {
-            var minPos = new Vector3(x - offset, 0, z - offset);
+            var loc = area.GetLocalizationUsingCords(new Vector3(x-offset, y, z-offset));
 
-            var maxPos = minPos + new Vector3(BlockProperties.DefaultBlockSize, BlockProperties.DefaultBlockSize,
-                BlockProperties.DefaultBlockSize);
+            if (loc == null)
+                throw new Exception("Localization not found for create terrain");
 
-            yield return new Block
+            var block = new Block()
             {
                 Id = Guid.NewGuid(),
-                BlockSize = BlockProperties.DefaultBlockSize,
-                FormImplementation = new BoundingBox(minPos, maxPos),
-                Form = null,
-                Interactions = new List<Interaction>(),
-                Physics = new List<Physic>()
+                Localization = loc,
+                IsEditable = false
             };
+            
+            loc.SetGameObject(block);
         }
-    }
 
-    private Terrain GetPrimaryTerrainInfo(TerrainSize size)
-    {
-        return new Terrain
-        {
-            Id = new Guid(),
-            Size = size,
-            Randomizer = new Random().Next(1, int.MaxValue)
-        };
+        return area;
     }
 }
