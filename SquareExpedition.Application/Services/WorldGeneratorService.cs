@@ -9,7 +9,7 @@ public class WorldGeneratorService
     {
         var world = new World()
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Area = new AreaGeneratorService().GenerateNewArea(size),
             WorldName = name
         };
