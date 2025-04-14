@@ -5,14 +5,9 @@ using SquareExpedition.Data.Physics;
 
 namespace SquareExpedition.Data.Objects.Characters;
 
-public abstract class Character : IGameObject
+public abstract class Character : GameObject
 {
-    public Guid Id { get; set; }
-    public Form? Form { get; set; }
-    public bool IsEditable { get; init; }
-    public Vector3[] Corners { get; set; } = [];
-    public ICollection<Interaction> Interactions { get; set; } = [];
-    public ICollection<Physic> Physics { get; set; } = [];
-    public Localization? Localization { get; set; }
-    public Vector3[] GetCorners() => Corners;
+    protected Character(Game game) : base(game)
+    {
+    }
 }

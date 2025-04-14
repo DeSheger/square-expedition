@@ -30,7 +30,7 @@ public class AreaGeneratorService : IAreaGeneratorService
         var offset = dimension / 2;
 
         for (var x = 0; x < dimension; x++)
-            for (var y = 0; y < 2; y++)
+            for (var y = 0; y < 10; y++)
                 for (var z = 0; z < dimension; z++)
                 {
                     yield return new Localization(x-offset, y, z-offset);

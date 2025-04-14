@@ -1,20 +1,22 @@
-using System.Numerics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Application.Abstract;
 using SquareExpedition.Data.Areas;
 using SquareExpedition.Data.Objects.Blocks;
+using Vector3 = System.Numerics.Vector3;
 
 namespace SquareExpedition.Application.Services;
 
 public class TerrainGeneratorService : ITerrainGeneratorService
 {
-    public Area GenerateNewTerrain(Area area)
+    public Area GenerateNewTerrain(Area area, Game game, BasicEffect effect, GraphicsDevice graphicsDevice)
     {
-        var areaWithTerrain = GenerateBlocks(area);
+        var areaWithTerrain = GenerateBlocks(area, game, effect, graphicsDevice);
 
         return areaWithTerrain;
     }
 
-    private Area GenerateBlocks(Area area)
+    private Area GenerateBlocks(Area area, Game game, BasicEffect effect, GraphicsDevice graphicsDevice)
     {
         var totalBlocks = (int)area.Size;
 
@@ -31,12 +33,7 @@ public class TerrainGeneratorService : ITerrainGeneratorService
             if (loc == null)
                 throw new Exception("Localization not found for create terrain");
 
-            var block = new Block()
-            {
-                Id = Guid.NewGuid(),
-                Localization = loc,
-                IsEditable = false
-            };
+            var block = new Block(game, effect, graphicsDevice, loc, false, Color.Black);
             
             loc.SetGameObject(block);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Application.Services;
@@ -18,12 +19,6 @@ public class GameCore : Game
     private Matrix _worldMatrix;
 
     private BasicEffect _basicEffect;
-    
-    private VertexBuffer _blockLinesVertexBuffer;
-    private int _blockLinesVertexCount;
-    
-    //private VertexBuffer _blockPointsVertexBuffer;
-    //private int _blockPointsVertexCount;
 
     private CameraService _cameraService;
     private ControllerService _controllerService;
@@ -31,6 +26,10 @@ public class GameCore : Game
     public GameCore()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.GraphicsProfile = GraphicsProfile.Reach;
+        _graphics.PreferredBackBufferWidth = 2000;
+        _graphics.PreferredBackBufferHeight = 1000;
+        
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -40,58 +39,32 @@ public class GameCore : Game
         base.Initialize();
         
         var worldGeneratorService = new WorldGeneratorService();
-        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small);
-        
-        var vertices = new List<VertexPositionColor>();
+        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small, this, _basicEffect, GraphicsDevice);
 
         if (world.Area?.Localizations == null)
             throw new Exception("Localization is not generated for area");
 
-        foreach (var localization in world.Area.Localizations)
+        foreach (var loc in world.Area.Localizations)
         {
-            var gameObject = localization.GetGameObject();
-            // For each bounding box, get its 8 corners
-            var corners = gameObject?.GetCorners();
-            
-            void AddLine(int start, int end)
+            try
             {
-                if(corners == null)
-                    return;
+                var gameObj = loc.GetGameObject();
                 
-                vertices.Add(new VertexPositionColor(corners[start], Color.Green));
-                vertices.Add(new VertexPositionColor(corners[end], Color.Green));
+                if(gameObj != null)
+                    Components.Add(loc.GetGameObject());   
             }
-
-            AddLine(0, 1);
-            AddLine(1, 2);
-            AddLine(2, 3);
-            AddLine(3, 0);
-            AddLine(4, 5);
-            AddLine(5, 6);
-            AddLine(6, 7);
-            AddLine(7, 4);
-            AddLine(0, 4);
-            AddLine(1, 5);
-            AddLine(2, 6);
-            AddLine(3, 7);
+            catch
+            {
+                Console.WriteLine(Components.Count);
+            }
         }
-        
-        _blockLinesVertexCount = vertices.Count;
-        _blockLinesVertexBuffer = new VertexBuffer(
-            GraphicsDevice,
-            typeof(VertexPositionColor),
-            _blockLinesVertexCount,
-            BufferUsage.WriteOnly
-        );
-        _blockLinesVertexBuffer.SetData(vertices.ToArray());
-
         
         // Create a camera and fetch the CameraService instance
         _cameraService = CameraService.GetInstance(new Camera());
         _controllerService = ControllerService.GetInstance(_cameraService);
 
         // Initial camera setup
-        _cameraService.SetCameraPosition(0f, 5f, -5f);
+        _cameraService.SetCameraPosition(0f, 20f, -20f);
         _cameraService.SetCameraTarget(0f, 0f, 0f);
 
         // Projection matrix
@@ -146,8 +119,6 @@ public class GameCore : Game
         _basicEffect.Projection = _projectionMatrix;
         _basicEffect.View = _viewMatrix;
         _basicEffect.World = _worldMatrix;
-        
-        GraphicsDevice.SetVertexBuffer(_blockLinesVertexBuffer);
 
         // Allow front/back face drawing
         RasterizerState rasterizerState = new RasterizerState
@@ -155,13 +126,6 @@ public class GameCore : Game
             CullMode = CullMode.None
         };
         GraphicsDevice.RasterizerState = rasterizerState;
-
-        // Draw triangle
-        foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
-        {
-            pass.Apply();
-            GraphicsDevice.DrawPrimitives(PrimitiveType.LineList, 0, _blockLinesVertexCount / 2);
-        }
         
         base.Draw(gameTime);
     }
