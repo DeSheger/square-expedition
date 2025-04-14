@@ -1,58 +1,151 @@
 using Common.Constants;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Data.Interactions;
-using SquareExpedition.Data.Physics;
 
 namespace SquareExpedition.Data.Objects.Blocks;
 
-public class Block : IGameObject
+public class Block : GameObject
 {
-    public Guid Id { get; set; }
-    public bool IsEditable { get; init; }
-    public Vector3[] Corners { get; set; } = [];
-    public ICollection<Interaction> Interactions { get; set; } = [];
-    public ICollection<Physic> Physics { get; set; } = [];
-    
+    private readonly GraphicsDevice? _gd;
+
+    private readonly BasicEffect _basicEffect;
+
+    private VertexBuffer? _vertexBuffer;
+
+    private VertexPositionColor[]? _vertexPositionColors;
+
+    public Block(Game game,
+        BasicEffect effect,
+        GraphicsDevice graphicDevice,
+        Localization? localization,
+        bool isEditable, Color color)
+        : base(game)
+    {
+        _localization = localization;
+        _basicEffect = effect;
+        _gd = graphicDevice;
+        Id = Guid.NewGuid();
+        IsEditable = isEditable;
+        BasicColor = color;
+    }
+
+    private Color BasicColor { get; set; }
     
     private Localization? _localization;
-    public Localization? Localization
+
+    public new Localization? Localization
     {
         get => _localization;
         set
         {
             _localization = value;
-            UpdateFormImplementation();
+            UpdateLocalization();
+            UpdateVertexPositionColor();
         }
     }
 
-    public Vector3[] GetCorners() => Corners.ToArray();
-
-    public BoundingBox? FormImplementation { get; private set;}
-    private void UpdateFormImplementation()
+    private void UpdateLocalization()
     {
         if (Localization != null)
         {
-            // TODO: handler for allow to change localization based on terrain info and space grid 
-            
-            var blockRadiusLength = BlockProperties.DefaultBlockSize / 2;
-            var minPos = new Vector3(
-                Localization.GetCoordinates().X - blockRadiusLength,
-                Localization.GetCoordinates().Y - blockRadiusLength,
-                Localization.GetCoordinates().Z - blockRadiusLength);
+            var blockRadiusLength = BlockProperties.DefaultBlockSize / 2.0f;
 
-            var maxPos = minPos + new Vector3(
-                BlockProperties.DefaultBlockSize, 
-                BlockProperties.DefaultBlockSize,
-                BlockProperties.DefaultBlockSize);
-           
-            FormImplementation = new BoundingBox(minPos, maxPos);
+            var dx = blockRadiusLength;
+            var dy = blockRadiusLength;
+            var dz = blockRadiusLength;
 
-            Corners = FormImplementation.Value.GetCorners();
+            var center = Localization.GetCoordinates();
+
+            Corners =
+            [
+                center + new Vector3(-dx, -dy, dz),
+                center + new Vector3(dx, -dy, dz),
+                center + new Vector3(dx, dy, dz),
+                center + new Vector3(-dx, dy, dz),
+
+                center + new Vector3(-dx, -dy, -dz),
+                center + new Vector3(dx, -dy, -dz),
+                center + new Vector3(dx, dy, -dz),
+                center + new Vector3(-dx, dy, -dz)
+            ];
         }
         else
-        { 
-            FormImplementation = null;
-            Corners = [];
+        {
+            Corners = null;
+            _vertexPositionColors = null;
+            _vertexBuffer = null;
         }
+    }
+
+    private void UpdateVertexPositionColor()
+    {
+        if(Corners == null)
+            return;
+        
+        _vertexPositionColors =
+        [
+            new VertexPositionColor(Corners[3], BasicColor),
+            new VertexPositionColor(Corners[2], BasicColor),
+            new VertexPositionColor(Corners[0], BasicColor),
+            new VertexPositionColor(Corners[1], BasicColor),
+
+            new VertexPositionColor(Corners[7], BasicColor),
+            new VertexPositionColor(Corners[4], BasicColor),
+            new VertexPositionColor(Corners[6], BasicColor),
+            new VertexPositionColor(Corners[5], BasicColor),
+            
+            new VertexPositionColor(Corners[3], BasicColor),
+            new VertexPositionColor(Corners[7], BasicColor),
+            new VertexPositionColor(Corners[2], BasicColor),
+            new VertexPositionColor(Corners[6], BasicColor),
+
+            new VertexPositionColor(Corners[0], BasicColor),
+            new VertexPositionColor(Corners[1], BasicColor),
+            new VertexPositionColor(Corners[4], BasicColor),
+            new VertexPositionColor(Corners[5], BasicColor),
+            
+            new VertexPositionColor(Corners[3], BasicColor),
+            new VertexPositionColor(Corners[0], BasicColor),
+            new VertexPositionColor(Corners[7], BasicColor),
+            new VertexPositionColor(Corners[4], BasicColor),
+
+            new VertexPositionColor(Corners[1], BasicColor),
+            new VertexPositionColor(Corners[2], BasicColor),
+            new VertexPositionColor(Corners[5], BasicColor),
+            new VertexPositionColor(Corners[6], BasicColor)
+        ];
+
+        _vertexBuffer = new VertexBuffer(
+            _gd,
+            VertexPositionColor.VertexDeclaration,
+            _vertexPositionColors.Length,
+            BufferUsage.WriteOnly);
+
+        _vertexBuffer.SetData(_vertexPositionColors);
+    }
+
+    public override void Draw(GameTime gameTime)
+    {
+        if (_gd == null)
+            throw new Exception($"Graphic Device is null for Block with Id {Id}");
+        
+        if(_vertexBuffer == null)
+            return;
+        
+        if(Corners == null)
+            return;
+
+        _gd.SetVertexBuffer(_vertexBuffer);
+        foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+        {
+            pass.Apply();
+            Console.WriteLine("test");
+
+            for (var i = 0; i < 6; ++i)
+                _gd.DrawPrimitives(PrimitiveType.TriangleStrip, 4 * i, 2);
+        }
+
+        base.Draw(gameTime);
     }
 }

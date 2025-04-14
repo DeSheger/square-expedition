@@ -4,19 +4,21 @@ using SquareExpedition.Data.Physics;
 
 namespace SquareExpedition.Data.Objects;
 
-public interface IGameObject
+public class GameObject : DrawableGameComponent
 {
-    public Guid Id { get; set; }
-    
-    public bool IsEditable { get; init; }
+    public GameObject(Game game) : base(game) {}
 
-    public Vector3[] Corners { get; set; }
+    public Guid? Id { get; set; }
 
-    public ICollection<Interaction> Interactions { get; set; }
+    public bool IsEditable { get; init; } = true;
 
-    public ICollection<Physic> Physics { get; set; }
+    public Vector3[]? Corners { get; set; } = [];
+
+    public ICollection<Interaction> Interactions { get; set; } = [];
+
+    public ICollection<Physic> Physics { get; set; } = [];
 
     public Localization? Localization { get; set; }
 
-    public Vector3[] GetCorners();
+    public Vector3[]? GetCorners() => Corners?.ToArray();
 }

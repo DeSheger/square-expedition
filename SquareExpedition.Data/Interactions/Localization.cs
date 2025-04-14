@@ -15,13 +15,13 @@ public class Localization
 
     private readonly Vector3 _centerPoint;
 
-    private IGameObject? _gameObject;
+    private GameObject? _gameObject;
 
     public Vector3 GetCoordinates() => _centerPoint;
     
-    public IGameObject? GetGameObject() => _gameObject;
+    public GameObject? GetGameObject() => _gameObject;
 
-    public IGameObject? SetGameObject(IGameObject? gameObject)
+    public GameObject? SetGameObject(GameObject? gameObject)
     {
         if (!IsFreeSpace())
         {
