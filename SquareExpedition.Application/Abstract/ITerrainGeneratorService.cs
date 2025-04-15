@@ -6,5 +6,5 @@ namespace SquareExpedition.Application.Abstract;
 
 public interface ITerrainGeneratorService
 {
-    Area GenerateNewTerrain(Area area, Game game, BasicEffect effect, GraphicsDevice graphicsDevice);
+    Area GenerateNewTerrain(Area area, Game game, BasicEffect effect);
 }
