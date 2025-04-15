@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SquareExpedition.Application.Services;
@@ -37,27 +35,6 @@ public class GameCore : Game
     protected override void Initialize()
     {
         base.Initialize();
-        
-        var worldGeneratorService = new WorldGeneratorService();
-        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small, this, _basicEffect, GraphicsDevice);
-
-        if (world.Area?.Localizations == null)
-            throw new Exception("Localization is not generated for area");
-
-        foreach (var loc in world.Area.Localizations)
-        {
-            try
-            {
-                var gameObj = loc.GetGameObject();
-                
-                if(gameObj != null)
-                    Components.Add(loc.GetGameObject());   
-            }
-            catch
-            {
-                Console.WriteLine(Components.Count);
-            }
-        }
         
         // Create a camera and fetch the CameraService instance
         _cameraService = CameraService.GetInstance(new Camera());
@@ -96,6 +73,27 @@ public class GameCore : Game
             VertexColorEnabled = true,
             LightingEnabled = false
         };
+        
+        var worldGeneratorService = new WorldGeneratorService();
+        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small, this, _basicEffect, _projectionMatrix, _viewMatrix, _worldMatrix);
+
+        if (world.Area?.Localizations == null)
+            throw new Exception("Localization is not generated for area");
+
+        foreach (var loc in world.Area.Localizations)
+        {
+            try
+            {
+                var gameObj = loc.GetGameObject();
+                gameObj?.Localization?.GetCoordinates();
+                if(gameObj != null)
+                    Components.Add(loc.GetGameObject());   
+            }
+            catch
+            {
+                Console.WriteLine(Components.Count);
+            }
+        }
     }
 
     protected override void LoadContent()

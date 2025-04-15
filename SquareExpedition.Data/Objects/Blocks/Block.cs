@@ -5,48 +5,29 @@ using SquareExpedition.Data.Interactions;
 
 namespace SquareExpedition.Data.Objects.Blocks;
 
-public class Block : GameObject
+public sealed class Block : GameObject
 {
-    private readonly GraphicsDevice? _gd;
-
-    private readonly BasicEffect _basicEffect;
-
-    private VertexBuffer? _vertexBuffer;
-
-    private VertexPositionColor[]? _vertexPositionColors;
-
-    public Block(Game game,
-        BasicEffect effect,
-        GraphicsDevice graphicDevice,
+    public Block(
+        Game game,
+        BasicEffect basicEffect,
+        Matrix projectionMatrix,
+        Matrix viewMatrix,
+        Matrix worldMatrix,
         Localization? localization,
-        bool isEditable, Color color)
-        : base(game)
+        bool isEditable,
+        Color color)
+        : base(game, basicEffect, projectionMatrix, viewMatrix, worldMatrix)
     {
-        _localization = localization;
-        _basicEffect = effect;
-        _gd = graphicDevice;
-        Id = Guid.NewGuid();
+        Localization = localization;
         IsEditable = isEditable;
         BasicColor = color;
+        BasicEffect = basicEffect;
     }
 
-    private Color BasicColor { get; set; }
-    
-    private Localization? _localization;
-
-    public new Localization? Localization
+    protected override void UpdateLocalization()
     {
-        get => _localization;
-        set
-        {
-            _localization = value;
-            UpdateLocalization();
-            UpdateVertexPositionColor();
-        }
-    }
+        base.UpdateLocalization();
 
-    private void UpdateLocalization()
-    {
         if (Localization != null)
         {
             var blockRadiusLength = BlockProperties.DefaultBlockSize / 2.0f;
@@ -57,8 +38,8 @@ public class Block : GameObject
 
             var center = Localization.GetCoordinates();
 
-            Corners =
-            [
+            Corners = new[]
+            {
                 center + new Vector3(-dx, -dy, dz),
                 center + new Vector3(dx, -dy, dz),
                 center + new Vector3(dx, dy, dz),
@@ -68,23 +49,25 @@ public class Block : GameObject
                 center + new Vector3(dx, -dy, -dz),
                 center + new Vector3(dx, dy, -dz),
                 center + new Vector3(-dx, dy, -dz)
-            ];
+            };
         }
         else
         {
             Corners = null;
-            _vertexPositionColors = null;
-            _vertexBuffer = null;
+            VertexPositionColors = null;
+            VertexBuffer = null;
         }
     }
 
-    private void UpdateVertexPositionColor()
+    protected override void UpdateVertexPositionColor()
     {
-        if(Corners == null)
+        base.UpdateVertexPositionColor();
+
+        if (Corners == null || GraphicsDevice == null)
             return;
-        
-        _vertexPositionColors =
-        [
+
+        VertexPositionColors = new[]
+        {
             new VertexPositionColor(Corners[3], BasicColor),
             new VertexPositionColor(Corners[2], BasicColor),
             new VertexPositionColor(Corners[0], BasicColor),
@@ -94,7 +77,7 @@ public class Block : GameObject
             new VertexPositionColor(Corners[4], BasicColor),
             new VertexPositionColor(Corners[6], BasicColor),
             new VertexPositionColor(Corners[5], BasicColor),
-            
+
             new VertexPositionColor(Corners[3], BasicColor),
             new VertexPositionColor(Corners[7], BasicColor),
             new VertexPositionColor(Corners[2], BasicColor),
@@ -104,7 +87,7 @@ public class Block : GameObject
             new VertexPositionColor(Corners[1], BasicColor),
             new VertexPositionColor(Corners[4], BasicColor),
             new VertexPositionColor(Corners[5], BasicColor),
-            
+
             new VertexPositionColor(Corners[3], BasicColor),
             new VertexPositionColor(Corners[0], BasicColor),
             new VertexPositionColor(Corners[7], BasicColor),
@@ -114,38 +97,14 @@ public class Block : GameObject
             new VertexPositionColor(Corners[2], BasicColor),
             new VertexPositionColor(Corners[5], BasicColor),
             new VertexPositionColor(Corners[6], BasicColor)
-        ];
+        };
 
-        _vertexBuffer = new VertexBuffer(
-            _gd,
+        VertexBuffer = new VertexBuffer(
+            GraphicsDevice,
             VertexPositionColor.VertexDeclaration,
-            _vertexPositionColors.Length,
+            VertexPositionColors.Length,
             BufferUsage.WriteOnly);
 
-        _vertexBuffer.SetData(_vertexPositionColors);
-    }
-
-    public override void Draw(GameTime gameTime)
-    {
-        if (_gd == null)
-            throw new Exception($"Graphic Device is null for Block with Id {Id}");
-        
-        if(_vertexBuffer == null)
-            return;
-        
-        if(Corners == null)
-            return;
-
-        _gd.SetVertexBuffer(_vertexBuffer);
-        foreach (var pass in _basicEffect.CurrentTechnique.Passes)
-        {
-            pass.Apply();
-            Console.WriteLine("test");
-
-            for (var i = 0; i < 6; ++i)
-                _gd.DrawPrimitives(PrimitiveType.TriangleStrip, 4 * i, 2);
-        }
-
-        base.Draw(gameTime);
+        VertexBuffer.SetData(VertexPositionColors);
     }
 }

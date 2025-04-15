@@ -7,16 +7,16 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace SquareExpedition.Application.Services;
 
-public class TerrainGeneratorService : ITerrainGeneratorService
+public class TerrainGeneratorService
 {
-    public Area GenerateNewTerrain(Area area, Game game, BasicEffect effect, GraphicsDevice graphicsDevice)
+    public Area GenerateNewTerrain(Area area, Game game, BasicEffect effect, Matrix projectionMatrix, Matrix viewMatrix, Matrix worldMatrix)
     {
-        var areaWithTerrain = GenerateBlocks(area, game, effect, graphicsDevice);
+        var areaWithTerrain = GenerateBlocks(area, game, effect, projectionMatrix, viewMatrix, worldMatrix);
 
         return areaWithTerrain;
     }
 
-    private Area GenerateBlocks(Area area, Game game, BasicEffect effect, GraphicsDevice graphicsDevice)
+    private Area GenerateBlocks(Area area, Game game, BasicEffect effect, Matrix projectionMatrix, Matrix viewMatrix, Matrix worldMatrix)
     {
         var totalBlocks = (int)area.Size;
 
@@ -33,7 +33,7 @@ public class TerrainGeneratorService : ITerrainGeneratorService
             if (loc == null)
                 throw new Exception("Localization not found for create terrain");
 
-            var block = new Block(game, effect, graphicsDevice, loc, false, Color.Black);
+            var block = new Block(game, effect, projectionMatrix, viewMatrix, worldMatrix, loc, false, Color.Black);
             
             loc.SetGameObject(block);
         }

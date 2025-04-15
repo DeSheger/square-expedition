@@ -7,7 +7,7 @@ namespace SquareExpedition.Application.Services;
 
 public class WorldGeneratorService
 {
-    public World GenerateNewWorld(string name, TerrainSize size, Game game, BasicEffect effect, GraphicsDevice graphicsDevice)
+    public World GenerateNewWorld(string name, TerrainSize size, Game game, BasicEffect effect, Matrix projectionMatrix, Matrix viewMatrix, Matrix worldMatrix)
     {
         var world = new World()
         {
@@ -16,7 +16,7 @@ public class WorldGeneratorService
             WorldName = name
         };
 
-        world.Area = new TerrainGeneratorService().GenerateNewTerrain(world.Area, game, effect, graphicsDevice);
+        world.Area = new TerrainGeneratorService().GenerateNewTerrain(world.Area, game, effect, projectionMatrix, viewMatrix, worldMatrix);
         return world;
     }
 }
