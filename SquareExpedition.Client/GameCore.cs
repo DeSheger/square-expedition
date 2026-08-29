@@ -1,130 +1,91 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using SquareExpedition.Application.Services;
-using SquareExpedition.Data.Interactions;
-using SquareExpedition.Data.Terrains;
 
 namespace SquareExpedition.Client;
 
 public class GameCore : Game
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
-    
-    private Matrix _projectionMatrix;
-    private Matrix _viewMatrix;
-    private Matrix _worldMatrix;
+   internal static GameCore SInstance;
 
-    private BasicEffect _basicEffect;
+    /// <summary>
+    /// Gets a reference to the Core instance.
+    /// </summary>
+    public static GameCore Instance => SInstance;
 
-    private CameraService _cameraService;
-    private ControllerService _controllerService;
+    /// <summary>
+    /// Gets the graphics device manager to control the presentation of graphics.
+    /// </summary>
+    public static GraphicsDeviceManager Graphics { get; private set; }
 
-    public GameCore()
+    /// <summary>
+    /// Gets the graphics device used to create graphical resources and perform primitive rendering.
+    /// </summary>
+    public static new GraphicsDevice GraphicsDevice { get; private set; }
+
+    /// <summary>
+    /// Gets the sprite batch used for all 2D rendering.
+    /// </summary>
+    public static SpriteBatch SpriteBatch { get; private set; }
+
+    /// <summary>
+    /// Gets the content manager used to load global assets.
+    /// </summary>
+    public static new ContentManager Content { get; private set; }
+
+    /// <summary>
+    /// Creates a new Core instance.
+    /// </summary>
+    /// <param name="title">The title to display in the title bar of the game window.</param>
+    /// <param name="width">The initial width, in pixels, of the game window.</param>
+    /// <param name="height">The initial height, in pixels, of the game window.</param>
+    /// <param name="fullScreen">Indicates if the game should start in fullscreen mode.</param>
+    public GameCore(string title, int width, int height, bool fullScreen)
     {
-        _graphics = new GraphicsDeviceManager(this);
-        _graphics.GraphicsProfile = GraphicsProfile.Reach;
-        _graphics.PreferredBackBufferWidth = 2000;
-        _graphics.PreferredBackBufferHeight = 1000;
-        
+        // Ensure that multiple cores are not created.
+        if (SInstance != null)
+        {
+            throw new InvalidOperationException($"Only a single Core instance can be created");
+        }
+
+        // Store reference to engine for global member access.
+        SInstance = this;
+
+        // Create a new graphics device manager.
+        Graphics = new GraphicsDeviceManager(this);
+
+        // Set the graphics defaults.
+        Graphics.PreferredBackBufferWidth = width;
+        Graphics.PreferredBackBufferHeight = height;
+        Graphics.IsFullScreen = fullScreen;
+
+        // Apply the graphic presentation changes.
+        Graphics.ApplyChanges();
+
+        // Set the window title.
+        Window.Title = title;
+
+        // Set the core's content manager to a reference of the base Game's
+        // content manager.
+        Content = base.Content;
+
+        // Set the root directory for content.
         Content.RootDirectory = "Content";
+
+        // Mouse is visible by default.
         IsMouseVisible = true;
     }
 
     protected override void Initialize()
     {
         base.Initialize();
-        
-        // Create a camera and fetch the CameraService instance
-        _cameraService = CameraService.GetInstance(new Camera());
-        _controllerService = ControllerService.GetInstance(_cameraService);
 
-        // Initial camera setup
-        _cameraService.SetCameraPosition(0f, 20f, -20f);
-        _cameraService.SetCameraTarget(0f, 0f, 0f);
+        // Set the core's graphics device to a reference of the base Game's
+        // graphics device.
+        GraphicsDevice = base.GraphicsDevice;
 
-        // Projection matrix
-        _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(
-            MathHelper.ToRadians(45f),
-            GraphicsDevice.DisplayMode.AspectRatio,
-            1f,
-            1000f
-        );
-
-        // View matrix
-        _viewMatrix = Matrix.CreateLookAt(
-            _cameraService.GetCameraPosition(),
-            _cameraService.GetCameraTarget(),
-            Vector3.Up
-        );
-
-        // World matrix
-        _worldMatrix = Matrix.CreateWorld(
-            _cameraService.GetCameraTarget(),
-            Vector3.Forward,
-            Vector3.Up
-        );
-
-        // BasicEffect
-        _basicEffect = new BasicEffect(GraphicsDevice)
-        {
-            Alpha = 1f,
-            VertexColorEnabled = true,
-            LightingEnabled = false
-        };
-        
-        var worldGeneratorService = new WorldGeneratorService();
-        var world = worldGeneratorService.GenerateNewWorld("Test world", TerrainSize.Small, this, _basicEffect, _projectionMatrix, _viewMatrix, _worldMatrix);
-
-        if (world.Area?.Localizations == null)
-            throw new Exception("Localization is not generated for area");
-
-        foreach (var loc in world.Area.Localizations)
-        {
-            try
-            {
-                var gameObj = loc.GetGameObject();
-                gameObj?.Localization?.GetCoordinates();
-                if(gameObj != null)
-                    Components.Add(loc.GetGameObject());   
-            }
-            catch
-            {
-                Console.WriteLine(Components.Count);
-            }
-        }
-    }
-
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
-    }
-
-    protected override void Update(GameTime gameTime)
-    {
-        _controllerService.HandleInput(gameTime, this, ref _viewMatrix);
-
-        base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        _basicEffect.Projection = _projectionMatrix;
-        _basicEffect.View = _viewMatrix;
-        _basicEffect.World = _worldMatrix;
-
-        // Allow front/back face drawing
-        RasterizerState rasterizerState = new RasterizerState
-        {
-            CullMode = CullMode.None
-        };
-        GraphicsDevice.RasterizerState = rasterizerState;
-        
-        base.Draw(gameTime);
+        // Create the sprite batch instance.
+        SpriteBatch = new SpriteBatch(GraphicsDevice);
     }
 }

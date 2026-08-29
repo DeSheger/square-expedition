@@ -1,2 +1,2 @@
-﻿using var game = new SquareExpedition.Client.GameCore();
+﻿using var game = new SquareExpedition.Client.SquareExpeditionGame();
 game.Run();
