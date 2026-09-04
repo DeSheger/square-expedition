@@ -15,8 +15,12 @@ public class SquareExpeditionGame : GameCore
 
     // Defines the bat animated sprite.
     private AnimatedSprite _bat;
+    
+    private Vector2 _previousPosition;
 
     private Vector2 _slimePosition;
+
+    private Rectangle _screenBounds;
     
     private const float MOVEMENT_SPEED = 5.0f;
     
@@ -60,12 +64,25 @@ public class SquareExpeditionGame : GameCore
 
         // Update the bat animated sprite.
         _bat.Update(gameTime);
+
+        _screenBounds = new Rectangle(
+            0,
+            0,
+            GraphicsDevice.PresentationParameters.BackBufferWidth,
+            GraphicsDevice.PresentationParameters.BackBufferHeight);
+        
+        _previousPosition = _slimePosition;
         
         // Check for keyboard input and handle it.
         CheckKeyboardInput();
 
         // Check for gamepad input and handle it.
         CheckGamePadInput();
+        
+        if (!_screenBounds.Contains(_slimePosition))
+        {
+            _slimePosition = _previousPosition;
+        }
 
         base.Update(gameTime);
     }

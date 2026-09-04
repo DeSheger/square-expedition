@@ -12,6 +12,11 @@ public class Sprite
     public TextureRegion Region { get; set; }
 
     /// <summary>
+    /// Bounds of the sprite for Collision Detecion.
+    /// </summary>
+    public Rectangle Bounds { get; set; }
+
+    /// <summary>
     /// Gets or Sets the color mask to apply when rendering this sprite.
     /// </summary>
     /// <remarks>
@@ -104,6 +109,14 @@ public class Sprite
     /// <param name="position">The xy-coordinate position to render this sprite at.</param>
     public void Draw(SpriteBatch spriteBatch, Vector2 position)
     {
+        Bounds = new Rectangle
+        {
+            X = (int)position.X,
+            Y = (int)position.Y,
+            Height = (int)Height,
+            Width = (int)Width,
+        };
+        
         Region.Draw(spriteBatch, position, Color, Rotation, Origin, Scale, Effects, LayerDepth);
     }
 }
